@@ -6,7 +6,10 @@
   </mdc-drawer>
   <div>
     <div class="drawer-button container">
-      <button class="toggle-button" (click)="drawerRef.open()">&gt;</button>
+      <button class="toggle-button"
+        [ngClass]="{'open-drawer': !drawerRef.isOpen() }"
+        (click)="toggleDrawer()">
+      </button>
     </div>
     TODO: add map view here
   </div>
