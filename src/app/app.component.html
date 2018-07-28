@@ -8,7 +8,7 @@
     <div class="drawer-button container">
       <button class="toggle-button"
         [ngClass]="{'open-drawer': !drawerRef.isOpen() }"
-        (click)="toggleDrawer()">
+        (click)="drawerRef.isOpen() ? drawerRef.close() : drawerRef.open()">
       </button>
     </div>
     TODO: add map view here
