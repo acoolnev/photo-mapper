@@ -1,0 +1,44 @@
+$mdc-theme-primary: #1565c0;
+$mdc-theme-secondary: #388e3c;
+$mdc-theme-background: #fff;
+$ak_pmap-drawer-width: 500px;
+
+@import "~@angular-mdc/theme/material";
+
+body,html {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.ak_pmap_main {
+  overflow-x: auto;
+
+  display: flex;
+  height: 100vh;
+
+  .mdc-drawer--persistent {
+    .mdc-drawer__drawer {
+      width: $ak_pmap-drawer-width;
+    }
+    &.mdc-drawer--open {
+      width: $ak_pmap-drawer-width;
+    }
+  }
+  .mdc-drawer--persistent:not(.mdc-drawer--open) {
+    display: none;
+  }
+
+  .drawer-button {
+    &.container {
+      position: absolute;
+    }
+    .toggle-button {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

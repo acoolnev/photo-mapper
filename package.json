@@ -1,6 +1,6 @@
 {
   "name": "photo-mapper",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -17,9 +17,11 @@
     "@angular/core": "^6.1.0",
     "@angular/forms": "^6.1.0",
     "@angular/http": "^6.1.0",
+    "@angular-mdc/web": "^0.37.2",
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
+    "@material/drawer": "^0.37.1",
     "core-js": "^2.5.4",
     "rxjs": "^6.2.2",
     "zone.js": "^0.8.26"
