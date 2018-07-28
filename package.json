@@ -22,8 +22,10 @@
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
     "@material/drawer": "^0.37.1",
+    "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
     "rxjs": "^6.2.2",
+    "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
