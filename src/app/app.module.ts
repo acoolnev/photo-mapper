@@ -5,6 +5,7 @@ import { MdcDrawerModule } from '@angular-mdc/web';
 
 import { AppComponent } from './app.component';
 import { RunOnce } from './services/run-once.service';
+import { ScriptLoader } from './services/script-loader.service';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { RunOnce } from './services/run-once.service';
     MdcDrawerModule
   ],
   providers: [
-    RunOnce
+    RunOnce,
+    ScriptLoader
   ],
   bootstrap: [AppComponent]
 })
