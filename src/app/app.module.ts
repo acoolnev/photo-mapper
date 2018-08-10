@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NgClass } from '@angular/common';
+
+import { MdcDrawerModule } from '@angular-mdc/web';
 
 import { AppComponent } from './app.component';
-import { MdcDrawerModule } from '@angular-mdc/web';
+import { RunOnce } from './services/run-once.service';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,10 @@ import { MdcDrawerModule } from '@angular-mdc/web';
     BrowserModule,
     MdcDrawerModule
   ],
-  providers: [],
+  providers: [
+    RunOnce
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
