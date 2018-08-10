@@ -4,6 +4,9 @@ import { NgModule } from '@angular/core';
 import { MdcDrawerModule } from '@angular-mdc/web';
 
 import { AppComponent } from './app.component';
+import { environment } from '../environments/environment'
+import { MAP_API_KEY_TOKEN } from './services/config'
+import { MapApiLoader } from './services/map-api-loader.service';
 import { RunOnce } from './services/run-once.service';
 import { ScriptLoader } from './services/script-loader.service';
 
@@ -16,8 +19,10 @@ import { ScriptLoader } from './services/script-loader.service';
     MdcDrawerModule
   ],
   providers: [
+    MapApiLoader,
     RunOnce,
-    ScriptLoader
+    ScriptLoader,
+    { provide: MAP_API_KEY_TOKEN, useValue: environment.mapApiKey }
   ],
   bootstrap: [AppComponent]
 })
