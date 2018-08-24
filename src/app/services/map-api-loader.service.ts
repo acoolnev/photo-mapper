@@ -1,5 +1,6 @@
 import { Injectable, Inject, OnDestroy, NgZone } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 import { MAP_API_KEY_TOKEN } from './config';
 import { RunOnce } from './run-once.service';
@@ -29,7 +30,7 @@ export class MapApiLoader implements OnDestroy {
         });
     });
 
-    return this.api$;
+    return this.api$.pipe(first());
   }
 
   private formatApiUrl(): string {

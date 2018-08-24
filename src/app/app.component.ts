@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MapApiLoader } from './services/map-api-loader.service'
 
 @Component({
   selector: 'app-root',
@@ -7,9 +6,4 @@ import { MapApiLoader } from './services/map-api-loader.service'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private mapApiLoader: MapApiLoader) {
-    this.mapApiLoader.load().subscribe(() => {
-      console.log("called initMapApi");
-    });
-  }
 }

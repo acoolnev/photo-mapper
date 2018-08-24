@@ -4,13 +4,13 @@
           TODO: add image list here
 			</mdc-drawer-content>
   </mdc-drawer>
-  <div>
+  <div class="map_container">
+    <map-view></map-view>
     <div class="drawer-button container">
       <button class="toggle-button"
         [ngClass]="{'open-drawer': !drawerRef.isOpen() }"
         (click)="drawerRef.isOpen() ? drawerRef.close() : drawerRef.open()">
       </button>
     </div>
-    TODO: add map view here
   </div>
 </div>
