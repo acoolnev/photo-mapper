@@ -19,6 +19,21 @@ body,html {
   .mat-sidenav {
     width: 32vw;
     height: 100%;
+
+    .image-list {
+      overflow-y: scroll;
+
+      .image {
+        display: block;
+        margin: 4px;
+        margin-right: 0;
+        margin-left: 0;
+        padding-left: 4px;
+        padding-right: 2px;
+        max-width: 100%;
+        height: auto;
+      }
+    }
   }
 
   .map_container {
