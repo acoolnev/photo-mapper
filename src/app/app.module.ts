@@ -1,7 +1,8 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { MdcDrawerModule } from '@angular-mdc/web';
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { MapViewComponent } from './map-view/map-view.component';
@@ -18,7 +19,9 @@ import { ScriptLoader } from './services/script-loader.service';
   ],
   imports: [
     BrowserModule,
-    MdcDrawerModule
+    BrowserAnimationsModule,
+    FlexLayoutModule,
+    MatSidenavModule,
   ],
   providers: [
     MapApiLoader,

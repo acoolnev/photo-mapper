@@ -1,16 +1,17 @@
-<div class="ak_pmap_main">
-  <mdc-drawer #drawerRef drawer='persistent'>
-			<mdc-drawer-content>
+<section class="ak_pmap_main" fxLayout="column" fxLayoutAlign="start stretch">
+  <mat-sidenav-container fxFlex>
+    <mat-sidenav mode="side" align="end" class="mat-elevation-z7"
+       fxLayout="column" fxLayoutAlign="start stretch" #sidenav>
           TODO: add image list here
-			</mdc-drawer-content>
-  </mdc-drawer>
-  <div class="map_container">
-    <map-view></map-view>
-    <div class="drawer-button container">
-      <button class="toggle-button"
-        [ngClass]="{'open-drawer': !drawerRef.isOpen() }"
-        (click)="drawerRef.isOpen() ? drawerRef.close() : drawerRef.open()">
-      </button>
+    </mat-sidenav>
+    <div class="map_container">
+      <map-view></map-view>
+      <div class="drawer-button container">
+        <button class="toggle-button"
+          [ngClass]="{'open-drawer': !sidenav.opened }"
+          (click)="sidenav.opened ? sidenav.close() : sidenav.open()">
+        </button>
+      </div>
     </div>
-  </div>
-</div>
+  </mat-sidenav-container>
+</section>
