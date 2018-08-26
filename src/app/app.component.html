@@ -3,7 +3,12 @@
     <mat-sidenav mode="side" align="end" class="mat-elevation-z7"
        fxLayout="column" fxLayoutAlign="start stretch" #sidenav>
       <div class="image-list">
-        <img class="image" src="../assets/{{i+1}}.jpg" *ngFor="let i of images" />
+        <button class="image-button"  *ngFor="let i of images"
+            [ngClass]="{'image-selected': currentImage == i }"
+            (click)="currentImage = i">
+          <img class="image" src="../assets/{{i+1}}.jpg" />
+          <div class="image-overlay">{{i+1}}.jpg</div>
+        </button>
       </div>
     </mat-sidenav>
     <div class="map_container">
