@@ -3,7 +3,10 @@
     <mat-sidenav mode="side" align="end" class="mat-elevation-z7"
        fxLayout="column" fxLayoutAlign="start stretch" #sidenav>
       <mat-toolbar fxFlex="none" color="primary">
-        <button mat-button>
+        <input type="file" multiple="multiple" accept="image/jpeg" 
+          [ngStyle]="{'display': 'none'}"  #selectFiles
+          (change)="onSelectedFiles($event)" />
+        <button mat-button (click)="selectFiles.click()">
           <mat-icon>photo</mat-icon>
           Load Photos
         </button>

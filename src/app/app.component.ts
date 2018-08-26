@@ -8,4 +8,8 @@ import { Component } from '@angular/core';
 export class AppComponent {
   images = Array.from(Array(4), (x, i) => i);
   currentImage: number = undefined;
+
+  public onSelectedFiles(event: Event) {
+    console.log((<HTMLInputElement>event.target).files);
+  }
 }
