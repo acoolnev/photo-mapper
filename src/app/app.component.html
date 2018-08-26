@@ -2,7 +2,13 @@
   <mat-sidenav-container fxFlex>
     <mat-sidenav mode="side" align="end" class="mat-elevation-z7"
        fxLayout="column" fxLayoutAlign="start stretch" #sidenav>
-      <div class="image-list">
+      <mat-toolbar fxFlex="none" color="primary">
+        <button mat-button>
+          <mat-icon>photo</mat-icon>
+          Load Photos
+        </button>
+      </mat-toolbar>
+      <div fxFlex="auto" class="image-list">
         <button class="image-button"  *ngFor="let i of images"
             [ngClass]="{'image-selected': currentImage == i }"
             (click)="currentImage = i">

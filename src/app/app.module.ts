@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -21,7 +24,10 @@ import { ScriptLoader } from './services/script-loader.service';
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    MatButtonModule,
+    MatIconModule,
     MatSidenavModule,
+    MatToolbarModule,
   ],
   providers: [
     MapApiLoader,
