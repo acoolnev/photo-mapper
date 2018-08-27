@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { MapViewComponent } from './map-view/map-view.component';
 import { environment } from '../environments/environment'
 import { MAP_API_KEY_TOKEN } from './services/config'
+import { FileIo } from './services/file-io.service';
 import { MapApiLoader } from './services/map-api-loader.service';
 import { RunOnce } from './services/run-once.service';
 import { ScriptLoader } from './services/script-loader.service';
@@ -30,6 +31,7 @@ import { ScriptLoader } from './services/script-loader.service';
     MatToolbarModule,
   ],
   providers: [
+    FileIo,
     MapApiLoader,
     RunOnce,
     ScriptLoader,
