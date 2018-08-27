@@ -13,10 +13,10 @@
       </mat-toolbar>
       <div fxFlex="auto" class="image-list">
         <button class="image-button"  *ngFor="let i of images"
-            [ngClass]="{'image-selected': currentImage == i }"
-            (click)="currentImage = i">
-          <img class="image" src="../assets/{{i+1}}.jpg" />
-          <div class="image-overlay">{{i+1}}.jpg</div>
+            [ngClass]="{'image-selected': i != null && currentImage == i.id }"
+            (click)="currentImage = i != null ? i.id : 0">
+          <img class="image" src="{{i != null ? i.dataUrl : ''}}" />
+          <div class="image-overlay">{{i != null ? i.file.name : ''}}</div>
         </button>
       </div>
     </mat-sidenav>

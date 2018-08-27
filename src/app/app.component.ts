@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FileIo } from './services/file-io.service';
 
 @Component({
   selector: 'app-root',
@@ -6,10 +7,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  images = Array.from(Array(4), (x, i) => i);
-  currentImage: number = undefined;
+  images = new Array<{id: number, file: File, dataUrl: string}>();
+  currentImage: number = 0;
+
+  constructor(private fileIo: FileIo) {}
 
   public onSelectedFiles(event: Event) {
-    console.log((<HTMLInputElement>event.target).files);
+    this.images.length = 0; // Clear images
+    this.currentImage = 0;
+    let files: FileList = (event.target as HTMLInputElement).files;
+    for (let i = 0; i < files.length; ++i) {
+      let file = files[i];
+      this.fileIo.load(file).subscribe(dataUrl => {
+        let img = {id: i, file: file, dataUrl: dataUrl };
+        this.images[i] = img;
+      });
+    }
   }
 }
