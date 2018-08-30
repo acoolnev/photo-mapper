@@ -16,7 +16,10 @@
             [ngClass]="{'image-selected': i != null && currentImage == i.id }"
             (click)="currentImage = i != null ? i.id : 0">
           <img class="image" src="{{i != null ? i.dataUrl : ''}}" />
-          <div class="image-overlay">{{i != null ? i.file.name : ''}}</div>
+          <div class="image-overlay" fxLayout="row" fxLayoutAlign="space-around center">
+              <mat-icon fxFlex="none"> {{i != null && i.hasGpsInfo ? 'location_on' : 'location_off'}} </mat-icon>
+              <span class="image-name mat-body-1" fxFlex="auto"> {{i != null ? i.file.name : ''}} </span>
+          </div>
         </button>
       </div>
     </mat-sidenav>
