@@ -1,5 +1,12 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+$map-popup-border-radius: 2px;
+$map-popup-shadow-color: rgba(0, 0, 0, 0.3);
+$map-popup-background: white;
+$map-popup-padding: 10px;
+$map-popup-arrow-height: 16px;
+$map-popup-border: 1px solid rgb(197, 197, 197);
+
 body,html {
   margin: 0;
   padding: 0;
@@ -90,4 +97,45 @@ body,html {
       outline:0;
     }
   }
+}
+
+.map-popup {
+  position: absolute;
+  display: inline-block;
+  padding: 10px;
+  opacity: 0;
+  background: $map-popup-background;
+  border: $map-popup-border;
+  border-radius: $map-popup-border-radius;
+  box-shadow: 1px 1px 4px $map-popup-shadow-color;
+ 
+  .arrow {
+    position: absolute;
+    left: 50%;
+    bottom: -$map-popup-arrow-height;
+    height: $map-popup-arrow-height;
+    width: $map-popup-arrow-height * 2;
+    margin-left: -$map-popup-arrow-height;
+    overflow: hidden;
+  }
+  .arrow:after {
+    content: "";
+    position: absolute;
+    left: 0px;
+    bottom: 7px;
+    width: $map-popup-arrow-height * 2;
+    height: $map-popup-arrow-height * 2;
+    border: $map-popup-border;
+    box-shadow: 2px 1px 4px $map-popup-shadow-color;
+    transform: scaleX(0.4) rotate(45deg) ;
+    background: $map-popup-background;
+  }
+}
+
+.map-popup.active {
+  opacity: 1;
+}
+
+.map-popup.out {
+  opacity: 0;
 }

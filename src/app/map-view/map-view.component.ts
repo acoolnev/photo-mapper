@@ -1,7 +1,9 @@
 /// <reference types="googlemaps" />
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild  } from '@angular/core';
 import { Observable } from 'rxjs';
+import { MapPopup } from './map-popup';
 import { MapApiLoader } from '../services/map-api-loader.service';
+import { appendPrototype } from '../tools/utils';
 
 
 @Component({
@@ -16,7 +18,15 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
   constructor(private mapApiLoader: MapApiLoader) {}
 
+  // Should be called from initMap() since google.maps.OverlayView is only
+  // defined once the Maps API has loaded.
+  injectMapsOverlay(){
+    appendPrototype(google.maps.OverlayView, MapPopup);
+  }
+
   initializeMap() {
+    this.injectMapsOverlay();
+
     let myLatlng = {lat: 39.739252, lng: -104.989237};
     let mapOptions = {
       zoom: 8,
@@ -35,8 +45,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     };
 
     this.map = new google.maps.Map(this.canvas.nativeElement as HTMLElement, mapOptions);
-    console.log("called initMapApi");
-  
+
      //=====Initialise Default Marker    
     // let marker = new google.maps.Marker({
     //     position: myLatlng,
@@ -80,6 +89,13 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.apiReady$.subscribe(() => {
       this.initializeMap();
+      this.showPopup(39.739489, -104.988940);
     });
+  }
+
+
+  showPopup(lat: number, lng: number) {
+    let popup = new MapPopup(lat, lng);
+    popup.setMap(this.map);
   }
 }

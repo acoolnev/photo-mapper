@@ -14,3 +14,9 @@ export function hasGpsInfo(jpegDataUrl: string) : boolean {
   }
   return hasGps;
 }
+
+export function appendPrototype(src: any, dst: any) {
+  for (let prop in src.prototype) {
+    dst.prototype[prop] = src.prototype[prop];
+  }  
+}
