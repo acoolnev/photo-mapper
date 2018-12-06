@@ -1,10 +1,26 @@
 /// <reference types="googlemaps" />
-import { AfterViewInit, Component, ElementRef, Renderer2, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ApplicationRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  Injector,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
+import { ComponentType } from '@angular/cdk/portal';
 import { Observable } from 'rxjs';
-import { MapPopup } from './map-popup';
+import { MapPopupContainer } from './map-popup-container';
+import { MapPopupContent } from './map-popup-content';
 import { MapApiLoader } from '../services/map-api-loader.service';
 import { appendPrototype } from '../tools/utils';
 
+export class MapPopupConfig {
+  lat: number;
+  lng: number;
+}
 
 @Component({
   selector: 'map-view',
@@ -18,12 +34,15 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     private mapApiLoader: MapApiLoader,
-    private renderer: Renderer2) {}
+    private renderer: Renderer2,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private appRef: ApplicationRef,
+    private injector: Injector) {}
 
   // Should be called from initMap() since google.maps.OverlayView is only
   // defined once the Maps API has loaded.
   injectMapsOverlay(){
-    appendPrototype(google.maps.OverlayView, MapPopup);
+    appendPrototype(google.maps.OverlayView, MapPopupContainer);
   }
 
   initializeMap() {
@@ -91,14 +110,14 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.apiReady$.subscribe(() => {
       this.initializeMap();
-      this.showPopup(39.739489, -104.988940);
+      this.showPopup(MapPopupContent, { lat: 39.739489, lng: -104.988940, });
     });
   }
 
+  showPopup<T>(content: ComponentType<T>, config: MapPopupConfig) {
+    let popup = new MapPopupContainer(this.map, this.renderer,
+      this.componentFactoryResolver, this.appRef, this.injector);
 
-  showPopup(lat: number, lng: number) {
-    let popup = new MapPopup(this.renderer);
-    popup.setPosition(lat, lng);
-    popup.setMap(this.map);
+    popup.open(content, config.lat, config.lng);
   }
 }
