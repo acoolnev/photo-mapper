@@ -1,29 +1,32 @@
+import { Renderer2 } from '@angular/core';
+
 export class MapPopup
 {
-  public readonly position: google.maps.LatLng;
+  private position: google.maps.LatLng;
   private body: HTMLElement;
 
-  constructor(lat: number, lng: number) {
-    this.position = new google.maps.LatLng(lat, lng);
+  constructor(private renderer: Renderer2) {
+    let arrow = this.renderer.createElement('div');
+    this.renderer.addClass(arrow, 'arrow');
 
-    let arrow = document.createElement('div');
-    arrow.classList.add('arrow');
+    let content = this.renderer.createElement('div');
+    this.renderer.appendChild(content, this.renderer.createText("Test"));
 
-    let content = document.createElement('div');
-    content.innerText = "Test";
-
-    this.body = document.createElement('div');
-    this.body.classList.add('map-popup');
-    this.body.classList.add('active');
-    this.body.appendChild(content);
-    this.body.appendChild(arrow);
-
+    this.body = this.renderer.createElement('div');
+    this.renderer.addClass(this.body, 'map-popup');
+    this.renderer.addClass(this.body, 'active');
+    this.renderer.appendChild(this.body, content);
+    this.renderer.appendChild(this.body, arrow);
 
     // Optionally stop clicks, etc., from bubbling up to the map.
     this.stopEventPropagation();
   };
 
-  stopEventPropagation() {
+  setPosition(lat: number, lng: number) {
+    this.position = new google.maps.LatLng(lat, lng);
+  }
+
+  private stopEventPropagation() {
     this.body.style.cursor = 'default';
 
     let body = this.body;

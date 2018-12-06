@@ -1,5 +1,5 @@
 /// <reference types="googlemaps" />
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild  } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Renderer2, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MapPopup } from './map-popup';
 import { MapApiLoader } from '../services/map-api-loader.service';
@@ -16,7 +16,9 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   @ViewChild('map_canvas') private canvas: ElementRef;
   public map: google.maps.Map;
 
-  constructor(private mapApiLoader: MapApiLoader) {}
+  constructor(
+    private mapApiLoader: MapApiLoader,
+    private renderer: Renderer2) {}
 
   // Should be called from initMap() since google.maps.OverlayView is only
   // defined once the Maps API has loaded.
@@ -95,7 +97,8 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
 
   showPopup(lat: number, lng: number) {
-    let popup = new MapPopup(lat, lng);
+    let popup = new MapPopup(this.renderer);
+    popup.setPosition(lat, lng);
     popup.setMap(this.map);
   }
 }
