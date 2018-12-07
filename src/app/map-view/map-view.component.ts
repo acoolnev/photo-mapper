@@ -52,6 +52,9 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     let mapOptions = {
       zoom: 8,
       center: myLatlng,
+      clickableIcons: false,
+      draggableCursor: 'default',
+      draggingCursor: 'default',
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       mapTypeControl: true,
       mapTypeControlOptions: {
@@ -67,38 +70,18 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
     this.map = new google.maps.Map(this.canvas.nativeElement as HTMLElement, mapOptions);
 
-     //=====Initialise Default Marker    
-    // let marker = new google.maps.Marker({
-    //     position: myLatlng,
-    //     map: this.map,
-    //     title: 'marker'
-    //  //=====You can even customize the icons here
-    // });
-  
-    //  //=====Initialise InfoWindow
-    // let infowindow = new google.maps.InfoWindow({
-    //   content: "<B>Civic Center Park</B>"
-    // });
-  
-    // //=====Eventlistener for InfoWindow
-    // google.maps.event.addListener(marker, 'click', function() {
-    //   infowindow.open(this.map,marker);
-    // });
+    let mapView = this;
+    let onclickTimeout = null;
 
-    // this.confirmationControl = new ConfirmationControl(this.map, myLatlng);
+    this.map.addListener('click', function(mouseEvent){
+        onclickTimeout = setTimeout(function(){
+            mapView.onClick(mouseEvent);
+        }, 200);        
+    });
     
-    // var mapView = this;
-    // var onclickTimeout = null;
-
-    // this.map.addListener('click', function(mouseEvent){
-    //     onclickTimeout = setTimeout(function(){
-    //         mapView.onClick(mouseEvent);
-    //     }, 200);        
-    // });
-    
-    // this.map.addListener('dblclick', function(mouseEvent) {
-    //     clearTimeout(onclickTimeout);
-    // });
+    this.map.addListener('dblclick', function(mouseEvent) {
+        clearTimeout(onclickTimeout);
+    });
   }
 
   // OnInit overrides
@@ -110,7 +93,6 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.apiReady$.subscribe(() => {
       this.initializeMap();
-      this.showPopup(MapPopupContent, { lat: 39.739489, lng: -104.988940, });
     });
   }
 
@@ -119,5 +101,10 @@ export class MapViewComponent implements OnInit, AfterViewInit {
       this.componentFactoryResolver, this.appRef, this.injector);
 
     popup.open(content, config.lat, config.lng);
+  }
+
+  private onClick(mouseEvent: google.maps.MouseEvent){
+    this.showPopup(MapPopupContent, 
+      { lat: mouseEvent.latLng.lat(), lng: mouseEvent.latLng.lng() });
   }
 }
