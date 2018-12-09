@@ -24,7 +24,7 @@
       </div>
     </mat-sidenav>
     <div class="map_container">
-      <map-view></map-view>
+      <map-view #map_view></map-view>
       <div class="drawer-button container">
         <button class="toggle-button"
           [ngClass]="{'open-drawer': !sidenav.opened }"

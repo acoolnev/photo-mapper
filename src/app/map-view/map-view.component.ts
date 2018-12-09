@@ -11,15 +11,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ComponentType } from '@angular/cdk/portal';
-import { Observable } from 'rxjs';
+import { fromEventPattern, Observable, ReplaySubject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { MapPopupContainer } from './map-popup-container';
-import { MapPopupContent } from './map-popup-content';
 import { MapApiLoader } from '../services/map-api-loader.service';
 import { appendPrototype } from '../tools/utils';
 
-export class MapPopupConfig {
+export class LatLng {
   lat: number;
   lng: number;
+}
+
+export class MapPopupConfig {
+  latLng: LatLng;
 }
 
 @Component({
@@ -29,23 +33,64 @@ export class MapPopupConfig {
 })
 export class MapViewComponent implements OnInit, AfterViewInit {
   private apiReady$: Observable<void>;
+  private mapReady$: ReplaySubject<void>;
   @ViewChild('map_canvas') private canvas: ElementRef;
-  public map: google.maps.Map;
+  private map: google.maps.Map;
 
   constructor(
     private mapApiLoader: MapApiLoader,
     private renderer: Renderer2,
     private componentFactoryResolver: ComponentFactoryResolver,
     private appRef: ApplicationRef,
-    private injector: Injector) {}
+    private injector: Injector) {
+
+      this.mapReady$ = new ReplaySubject(1);
+  }
+
+  showPopup<T>(content: ComponentType<T>, config: MapPopupConfig) {
+    let popup = new MapPopupContainer(this.map, this.renderer,
+      this.componentFactoryResolver, this.appRef, this.injector);
+
+    popup.open(content, config.latLng.lat, config.latLng.lng);
+  }
+
+  onClick(): Observable<LatLng>  {
+    let mapView = this;
+
+    let mapEvents = { clickEvent: null, dblclickEvent: null };
+
+    return this.mapReady$.pipe(switchMap(() => fromEventPattern(
+      (handler:any) => { // addHandler
+        let onclickTimeout = null;
+
+        mapEvents.clickEvent = mapView.map.addListener('click',
+          function(mouseEvent) {
+            onclickTimeout = setTimeout(function(){
+                handler({
+                  lat: mouseEvent.latLng.lat(),
+                  lng: mouseEvent.latLng.lng()});
+            }, 200);
+          });
+
+        // Cacncel 'click' if 'dblclick' detected.
+        mapEvents.dblclickEvent = mapView.map.addListener('dblclick',
+          function(mouseEvent) {
+            clearTimeout(onclickTimeout);
+          });
+      },
+      (handler:any) => { // removeHandler
+        google.maps.event.removeListener(mapEvents.clickEvent);
+        google.maps.event.removeListener(mapEvents.dblclickEvent);
+      })));
+  }
 
   // Should be called from initMap() since google.maps.OverlayView is only
   // defined once the Maps API has loaded.
-  injectMapsOverlay(){
+  private injectMapsOverlay(){
     appendPrototype(google.maps.OverlayView, MapPopupContainer);
   }
 
-  initializeMap() {
+  private initializeMap() {
     this.injectMapsOverlay();
 
     let myLatlng = {lat: 39.739252, lng: -104.989237};
@@ -70,18 +115,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
     this.map = new google.maps.Map(this.canvas.nativeElement as HTMLElement, mapOptions);
 
-    let mapView = this;
-    let onclickTimeout = null;
-
-    this.map.addListener('click', function(mouseEvent){
-        onclickTimeout = setTimeout(function(){
-            mapView.onClick(mouseEvent);
-        }, 200);        
-    });
-    
-    this.map.addListener('dblclick', function(mouseEvent) {
-        clearTimeout(onclickTimeout);
-    });
+    this.mapReady$.next();
   }
 
   // OnInit overrides
@@ -94,17 +128,5 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     this.apiReady$.subscribe(() => {
       this.initializeMap();
     });
-  }
-
-  showPopup<T>(content: ComponentType<T>, config: MapPopupConfig) {
-    let popup = new MapPopupContainer(this.map, this.renderer,
-      this.componentFactoryResolver, this.appRef, this.injector);
-
-    popup.open(content, config.lat, config.lng);
-  }
-
-  private onClick(mouseEvent: google.maps.MouseEvent){
-    this.showPopup(MapPopupContent, 
-      { lat: mouseEvent.latLng.lat(), lng: mouseEvent.latLng.lng() });
   }
 }
