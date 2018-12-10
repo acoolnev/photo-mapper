@@ -14,6 +14,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { fromEventPattern, Observable, ReplaySubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MapPopupContainer } from './map-popup-container';
+import { MapPopupRef } from './map-popup-ref';
 import { MapApiLoader } from '../services/map-api-loader.service';
 import { appendPrototype } from '../tools/utils';
 
@@ -47,11 +48,11 @@ export class MapViewComponent implements OnInit, AfterViewInit {
       this.mapReady$ = new ReplaySubject(1);
   }
 
-  showPopup<T>(content: ComponentType<T>, config: MapPopupConfig) {
+  showPopup<T>(content: ComponentType<T>, config: MapPopupConfig): MapPopupRef {
     let popup = new MapPopupContainer(this.map, this.renderer,
       this.componentFactoryResolver, this.appRef, this.injector);
 
-    popup.open(content, config.latLng.lat, config.latLng.lng);
+    return popup.open(content, config.latLng.lat, config.latLng.lng);
   }
 
   onClick(): Observable<LatLng>  {

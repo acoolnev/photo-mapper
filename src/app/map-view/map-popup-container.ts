@@ -8,10 +8,10 @@ import {
   ComponentPortal,
   DomPortalOutlet,
   PortalOutlet } from '@angular/cdk/portal';
+import { MapPopupRef } from './map-popup-ref';
 
 
-export class MapPopupContainer
-{
+export class MapPopupContainer {
   private position: google.maps.LatLng;
   private body: HTMLElement;
   private portal: ComponentPortal<any>;
@@ -30,12 +30,14 @@ export class MapPopupContainer
     this.stopEventPropagation();
   }
 
-  open<T>(content: ComponentType<T>, lat: number, lng: number) {
+  open<T>(content: ComponentType<T>, lat: number, lng: number) : MapPopupRef {
     this.close();
 
     this.attachContent(content);
     this.position = new google.maps.LatLng(lat, lng);
     this.setMap(this.map);
+
+    return new MapPopupRef(this);
   }
 
   close() {

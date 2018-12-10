@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MapPopupContent } from './map-view/map-popup-content';
+import { MapPopupRef } from './map-view/map-popup-ref';
 import { LatLng, MapViewComponent } from './map-view/map-view.component';
 import { FileIo } from './services/file-io.service';
 import { hasGpsInfo } from './tools/utils'
@@ -11,6 +12,7 @@ import { hasGpsInfo } from './tools/utils'
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('map_view') private mapView: MapViewComponent;
+  private mapPopup: MapPopupRef;
   images = new Array<{id: number, file: File, hasGpsInfo: boolean, dataUrl: string}>();
   currentImage: number = 0;
 
@@ -33,7 +35,10 @@ export class AppComponent implements AfterViewInit {
   // AfterViewInit overrides
   ngAfterViewInit() {
     this.mapView.onClick().subscribe((latLng: LatLng) => {
-      this.mapView.showPopup(MapPopupContent, { latLng: latLng });
+      if (this.mapPopup) {
+        this.mapPopup.close();
+      }
+      this.mapPopup = this.mapView.showPopup(MapPopupContent, { latLng: latLng });
     });
   }
 }
