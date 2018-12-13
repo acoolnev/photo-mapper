@@ -8,7 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
-import { MapPopupContent } from './map-view/map-popup-content';
+import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
 import { MapViewComponent } from './map-view/map-view.component';
 import { environment } from '../environments/environment'
 import { MAP_API_KEY_TOKEN } from './services/config'
@@ -20,11 +20,11 @@ import { ScriptLoader } from './services/script-loader.service';
 @NgModule({
   declarations: [
     AppComponent,
-    MapPopupContent,
+    ConfirmPhotoLocationComponent,
     MapViewComponent
   ],
   entryComponents: [
-    MapPopupContent
+    ConfirmPhotoLocationComponent
   ],
   imports: [
     BrowserModule,

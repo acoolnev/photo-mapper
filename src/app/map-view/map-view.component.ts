@@ -48,11 +48,11 @@ export class MapViewComponent implements OnInit, AfterViewInit {
       this.mapReady$ = new ReplaySubject(1);
   }
 
-  showPopup<T>(content: ComponentType<T>, config: MapPopupConfig): MapPopupRef {
+  showPopup<T>(content: ComponentType<T>, config: MapPopupConfig): MapPopupRef<T> {
     let popup = new MapPopupContainer(this.map, this.renderer,
       this.componentFactoryResolver, this.appRef, this.injector);
 
-    return popup.open(content, config.latLng.lat, config.latLng.lng);
+    return popup.open<T>(content, config.latLng.lat, config.latLng.lng);
   }
 
   onClick(): Observable<LatLng>  {

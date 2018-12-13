@@ -1,6 +1,7 @@
 import {
    ApplicationRef,
    ComponentFactoryResolver,
+   ComponentRef,
    Injector,
    Renderer2 } from '@angular/core';
 import {
@@ -30,14 +31,14 @@ export class MapPopupContainer {
     this.stopEventPropagation();
   }
 
-  open<T>(content: ComponentType<T>, lat: number, lng: number) : MapPopupRef {
+  open<T>(content: ComponentType<T>, lat: number, lng: number) : MapPopupRef<T> {
     this.close();
 
-    this.attachContent(content);
+    const contentRef = this.attachContent<T>(content);
     this.position = new google.maps.LatLng(lat, lng);
     this.setMap(this.map);
 
-    return new MapPopupRef(this);
+    return new MapPopupRef<T>(contentRef.instance, this);
   }
 
   close() {
@@ -48,13 +49,13 @@ export class MapPopupContainer {
     }
   }
 
-  private attachContent<T>(content: ComponentType<T>) {
+  private attachContent<T>(content: ComponentType<T>) : ComponentRef<T> {
     this.portal = new ComponentPortal(content);
 
     this.outlet = new DomPortalOutlet(this.body,
       this.componentFactoryResolver, this.appRef, this.injector);
 
-    this.outlet.attach(this.portal);
+    return this.outlet.attach(this.portal);
   }
 
   private detachContent() {

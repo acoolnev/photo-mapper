@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MapPopupContent } from './map-view/map-popup-content';
+import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
 import { MapPopupRef } from './map-view/map-popup-ref';
 import { LatLng, MapViewComponent } from './map-view/map-view.component';
 import { FileIo } from './services/file-io.service';
@@ -12,7 +12,7 @@ import { hasGpsInfo } from './tools/utils'
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('map_view') private mapView: MapViewComponent;
-  private mapPopup: MapPopupRef;
+  private mapPopup: MapPopupRef<ConfirmPhotoLocationComponent>;
   images = new Array<{id: number, file: File, hasGpsInfo: boolean, dataUrl: string}>();
   currentImage: number = 0;
 
@@ -38,7 +38,13 @@ export class AppComponent implements AfterViewInit {
       if (this.mapPopup) {
         this.mapPopup.close();
       }
-      this.mapPopup = this.mapView.showPopup(MapPopupContent, { latLng: latLng });
+      this.mapPopup = this.mapView.showPopup(ConfirmPhotoLocationComponent,
+         { latLng: latLng });
+
+      this.mapPopup.componentInstance.cancel.subscribe(() => {
+        this.mapPopup.close();
+        this.mapPopup = null;
+      });
     });
   }
 }

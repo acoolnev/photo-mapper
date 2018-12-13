@@ -1,8 +1,9 @@
 import { MapPopupContainer } from './map-popup-container'
 
-export class MapPopupRef
-{
-  constructor(private container: MapPopupContainer) {}
+export class MapPopupRef<T> {
+  constructor(
+    public componentInstance: T,
+    private container: MapPopupContainer) {}
 
   close() {
     this.container.close();
