@@ -3,7 +3,7 @@ import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.
 import { MapPopupRef } from './map-view/map-popup-ref';
 import { LatLng, MapViewComponent } from './map-view/map-view.component';
 import { FileIo } from './services/file-io.service';
-import { hasGpsInfo } from './tools/utils'
+import { addGpsInfo, hasGpsInfo } from './tools/utils'
 
 @Component({
   selector: 'app-root',
@@ -34,6 +34,7 @@ export class AppComponent implements AfterViewInit {
 
   // AfterViewInit overrides
   ngAfterViewInit() {
+    
     this.mapView.onClick().subscribe((latLng: LatLng) => {
       if (this.mapPopup) {
         this.mapPopup.close();
@@ -42,6 +43,16 @@ export class AppComponent implements AfterViewInit {
          { latLng: latLng });
 
       this.mapPopup.componentInstance.cancel.subscribe(() => {
+        this.mapPopup.close();
+        this.mapPopup = null;
+      });
+
+      this.mapPopup.componentInstance.confirm.subscribe(() => {
+        if (this.images.length) {
+          const jpegDataUrl = this.images[this.currentImage].dataUrl;
+          addGpsInfo(jpegDataUrl, latLng.lat, latLng.lng);        
+        }
+
         this.mapPopup.close();
         this.mapPopup = null;
       });
