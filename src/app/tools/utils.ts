@@ -27,6 +27,21 @@ export function addGpsInfo(jpegDataUrl: string, lat: number, lng: number) {
   return piexif.insert(exifBytes, jpegDataUrl); // JPEG data URL with GPS
 }
 
+export function binaryToArray(binary: string) : Uint8Array {
+  let data: number[] = [];
+  for (let i = 0; i < binary.length; ++i) {
+      data[i] = binary.charCodeAt(i);
+  }
+  return new Uint8Array(data);
+}
+
+export function dataUrlToBlob(dataUrl: string) : Blob {
+  const mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+  const binaryData = atob(dataUrl.split(",")[1]);
+  const arrayData = binaryToArray(binaryData);
+  return new Blob([arrayData], {type: mimeString});
+}
+
 export function appendPrototype(src: any, dst: any) {
   for (let prop in src.prototype) {
     dst.prototype[prop] = src.prototype[prop];

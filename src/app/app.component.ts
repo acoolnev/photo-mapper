@@ -39,6 +39,11 @@ export class AppComponent implements AfterViewInit {
       if (this.mapPopup) {
         this.mapPopup.close();
       }
+
+      if (!this.images.length) {
+        return;
+      }
+
       this.mapPopup = this.mapView.showPopup(ConfirmPhotoLocationComponent,
          { latLng: latLng });
 
@@ -48,13 +53,13 @@ export class AppComponent implements AfterViewInit {
       });
 
       this.mapPopup.componentInstance.confirm.subscribe(() => {
-        if (this.images.length) {
-          const jpegDataUrl = this.images[this.currentImage].dataUrl;
-          addGpsInfo(jpegDataUrl, latLng.lat, latLng.lng);        
-        }
-
         this.mapPopup.close();
         this.mapPopup = null;
+
+        const jpegDataUrl = this.images[this.currentImage].dataUrl;
+        const newJpegData = addGpsInfo(jpegDataUrl, latLng.lat, latLng.lng);
+        const file = this.images[this.currentImage].file;
+        this.fileIo.save(newJpegData, file);
       });
     });
   }
