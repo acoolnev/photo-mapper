@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
 import { MapPopupRef } from './map-view/map-popup-ref';
 import { LatLng, MapViewComponent } from './map-view/map-view.component';
@@ -11,6 +11,7 @@ import { addGpsInfo, hasGpsInfo } from './tools/utils'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
+  @ViewChild('selectFiles') private selectFiles: ElementRef;
   @ViewChild('map_view') private mapView: MapViewComponent;
   private mapPopup: MapPopupRef<ConfirmPhotoLocationComponent>;
   images = new Array<{id: number, file: File, hasGpsInfo: boolean, dataUrl: string}>();
@@ -18,7 +19,15 @@ export class AppComponent implements AfterViewInit {
 
   constructor(private fileIo: FileIo) {}
 
-  public onSelectedFiles(event: Event) {
+  public onSelectFilesClick() {
+    if (this.mapPopup) {
+      this.mapPopup.close();
+    }
+
+    (this.selectFiles.nativeElement as HTMLInputElement).click();
+  }
+  
+  public onFilesSelected(event: Event) {
     this.images.length = 0; // Clear images
     this.currentImage = 0;
     let files: FileList = (event.target as HTMLInputElement).files;

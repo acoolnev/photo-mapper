@@ -5,8 +5,8 @@
       <mat-toolbar fxFlex="none" color="primary">
         <input type="file" multiple="multiple" accept="image/jpeg" 
           [ngStyle]="{'display': 'none'}"  #selectFiles
-          (change)="onSelectedFiles($event)" />
-        <button mat-button (click)="selectFiles.click()">
+          (change)="onFilesSelected($event)" />
+        <button mat-button (click)="onSelectFilesClick()">
           <mat-icon>photo</mat-icon>
           Load Photos
         </button>
