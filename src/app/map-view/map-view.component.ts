@@ -44,12 +44,20 @@ export class MapViewComponent implements OnInit, AfterViewInit {
       this.mapReady$ = new ReplaySubject(1);
   }
 
-  addMarker(latLng: LatLng) {
+  isVisible(latLng: LatLng) : boolean {
+    const bounds = this.map.getBounds();
+    return bounds.contains(this.toMapLatLng(latLng));
+  }
+
+  addMarker(latLng: LatLng, makeVisible = true) {
     let marker = new google.maps.Marker({
       position: new google.maps.LatLng(latLng.lat, latLng.lng),
       map: this.map
     });
-    this.markers.push(marker);    
+    this.markers.push(marker);
+
+    if (makeVisible && !this.isVisible(latLng))
+      this.map.setCenter(this.toMapLatLng(latLng));
   }
 
   removeMarkers() {
@@ -128,6 +136,10 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     this.map = new google.maps.Map(this.canvas.nativeElement as HTMLElement, mapOptions);
 
     this.mapReady$.next();
+  }
+
+  private toMapLatLng(latLng: LatLng) : google.maps.LatLng {
+    return new google.maps.LatLng(latLng.lat, latLng.lng);
   }
 
   // OnInit overrides
