@@ -1,18 +1,33 @@
 import * as piexif from './piexif.js';
 
-export function hasGpsInfo(jpegDataUrl: string) : boolean {
+export class LatLng {
+  lat: number;
+  lng: number;
+}
+
+function getGpsData(jpegDataUrl: string) {
   let exif = piexif.load(jpegDataUrl);
-  let gpsData = exif['GPS'];
-  let gpsTags = [piexif.GPSIFD.GPSLatitudeRef, piexif.GPSIFD.GPSLatitude,
-                 piexif.GPSIFD.GPSLongitudeRef, piexif.GPSIFD.GPSLongitude];
-  
-  let hasGps: boolean = true;
+  return exif['GPS'];
+}
+
+export function getGpsInfo(jpegDataUrl: string) : LatLng {
+  let gpsData = getGpsData(jpegDataUrl);
+
+  const gpsTags = [piexif.GPSIFD.GPSLatitudeRef, piexif.GPSIFD.GPSLatitude,
+                   piexif.GPSIFD.GPSLongitudeRef, piexif.GPSIFD.GPSLongitude];
+
   for (let tag of gpsTags) {
-    hasGps = hasGps && gpsData[tag];
-    if (!hasGps)
-      break;
+    if (!gpsData[tag])
+      return null;
   }
-  return hasGps;
+
+  const latRef = gpsData[piexif.GPSIFD.GPSLatitudeRef];
+  const latDms = gpsData[piexif.GPSIFD.GPSLatitude];
+  const lngRef = gpsData[piexif.GPSIFD.GPSLongitudeRef];
+  const lngDms = gpsData[piexif.GPSIFD.GPSLongitude];
+
+  return {lat: piexif.GPSHelper.dmsRationalToDeg(latDms, latRef),
+          lng: piexif.GPSHelper.dmsRationalToDeg(lngDms, lngRef)};
 }
 
 export function addGpsInfo(jpegDataUrl: string, lat: number, lng: number) {

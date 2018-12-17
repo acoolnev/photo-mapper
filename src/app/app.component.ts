@@ -1,9 +1,16 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
 import { MapPopupRef } from './map-view/map-popup-ref';
-import { LatLng, MapViewComponent } from './map-view/map-view.component';
+import { MapViewComponent } from './map-view/map-view.component';
 import { FileIo } from './services/file-io.service';
-import { addGpsInfo, hasGpsInfo } from './tools/utils'
+import { addGpsInfo, getGpsInfo, LatLng } from './tools/utils'
+
+class ImageInfo {
+  id: number;
+  file: File;
+  latLng: LatLng;
+  dataUrl: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -14,15 +21,13 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('selectFiles') private selectFiles: ElementRef;
   @ViewChild('map_view') private mapView: MapViewComponent;
   private mapPopup: MapPopupRef<ConfirmPhotoLocationComponent>;
-  images = new Array<{id: number, file: File, hasGpsInfo: boolean, dataUrl: string}>();
+  images: ImageInfo[] = [];
   currentImage: number = 0;
 
   constructor(private fileIo: FileIo) {}
 
   public onSelectFilesClick() {
-    if (this.mapPopup) {
-      this.mapPopup.close();
-    }
+    this.clearMapState();
 
     (this.selectFiles.nativeElement as HTMLInputElement).click();
   }
@@ -34,11 +39,32 @@ export class AppComponent implements AfterViewInit {
     for (let i = 0; i < files.length; ++i) {
       let file = files[i];
       this.fileIo.load(file).subscribe(dataUrl => {
-        let img = {id: i, file: file, hasGpsInfo: hasGpsInfo(dataUrl),
+        let img = {id: i, file: file, latLng: getGpsInfo(dataUrl),
                    dataUrl: dataUrl };
         this.images[i] = img;
+
+        if (i == this.currentImage && img.latLng)
+          this.mapView.addMarker(this.images[this.currentImage].latLng);
       });
     }
+  }
+
+  public onImageClick(image: ImageInfo) {
+    this.clearMapState();
+
+    if (!image)
+      return;
+
+    this.currentImage = image.id;
+    if (image.latLng)
+      this.mapView.addMarker(image.latLng);
+  }
+
+  private clearMapState() {
+    if (this.mapPopup) {
+      this.mapPopup.close();
+    }
+    this.mapView.removeMarkers();
   }
 
   // AfterViewInit overrides

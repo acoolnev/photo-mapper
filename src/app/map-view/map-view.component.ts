@@ -16,12 +16,7 @@ import { switchMap } from 'rxjs/operators';
 import { MapPopupContainer } from './map-popup-container';
 import { MapPopupRef } from './map-popup-ref';
 import { MapApiLoader } from '../services/map-api-loader.service';
-import { appendPrototype } from '../tools/utils';
-
-export class LatLng {
-  lat: number;
-  lng: number;
-}
+import { appendPrototype, LatLng } from '../tools/utils';
 
 export class MapPopupConfig {
   latLng: LatLng;
@@ -37,6 +32,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   private mapReady$: ReplaySubject<void>;
   @ViewChild('map_canvas') private canvas: ElementRef;
   private map: google.maps.Map;
+  private markers: google.maps.Marker[] = [];
 
   constructor(
     private mapApiLoader: MapApiLoader,
@@ -46,6 +42,21 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     private injector: Injector) {
 
       this.mapReady$ = new ReplaySubject(1);
+  }
+
+  addMarker(latLng: LatLng) {
+    let marker = new google.maps.Marker({
+      position: new google.maps.LatLng(latLng.lat, latLng.lng),
+      map: this.map
+    });
+    this.markers.push(marker);    
+  }
+
+  removeMarkers() {
+    this.markers.forEach((marker) => {
+      marker.setMap(null);
+    });
+    this.markers = [];
   }
 
   showPopup<T>(content: ComponentType<T>, config: MapPopupConfig): MapPopupRef<T> {
