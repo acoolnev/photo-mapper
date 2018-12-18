@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
 import { MapPopupRef } from './map-view/map-popup-ref';
 import { MapViewComponent } from './map-view/map-view.component';
@@ -18,7 +18,6 @@ class ImageInfo {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild('selectFiles') private selectFiles: ElementRef;
   @ViewChild('map_view') private mapView: MapViewComponent;
   private mapPopup: MapPopupRef<ConfirmPhotoLocationComponent>;
   images: ImageInfo[] = [];
@@ -26,16 +25,14 @@ export class AppComponent implements AfterViewInit {
 
   constructor(private fileIo: FileIo) {}
 
-  public onSelectFilesClick() {
-    this.clearMapState();
-
-    (this.selectFiles.nativeElement as HTMLInputElement).click();
-  }
-  
   public onFilesSelected(event: Event) {
+    let files: FileList = (event.target as HTMLInputElement).files;
+    if (!files.length) // Cancel pressed in the files dialog
+      return;
+
+    this.clearMapState();
     this.images.length = 0; // Clear images
     this.currentImage = 0;
-    let files: FileList = (event.target as HTMLInputElement).files;
     for (let i = 0; i < files.length; ++i) {
       let file = files[i];
       this.fileIo.load(file).subscribe(dataUrl => {

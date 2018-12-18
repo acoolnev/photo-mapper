@@ -6,7 +6,7 @@
         <input type="file" multiple="multiple" accept="image/jpeg" 
           [ngStyle]="{'display': 'none'}"  #selectFiles
           (change)="onFilesSelected($event)" />
-        <button mat-button (click)="onSelectFilesClick()">
+        <button mat-button (click)="selectFiles.click()">
           <mat-icon>photo</mat-icon>
           Load Photos
         </button>
