@@ -10,6 +10,7 @@ class ImageInfo {
   file: File;
   latLng: LatLng;
   dataUrl: string;
+  saved: boolean;
 }
 
 @Component({
@@ -37,7 +38,7 @@ export class AppComponent implements AfterViewInit {
       let file = files[i];
       this.fileIo.load(file).subscribe(dataUrl => {
         let img = {id: i, file: file, latLng: getGpsInfo(dataUrl),
-                   dataUrl: dataUrl };
+                   dataUrl: dataUrl, saved: false};
         this.images[i] = img;
 
         if (i == this.currentImage && img.latLng)
@@ -88,10 +89,12 @@ export class AppComponent implements AfterViewInit {
         this.mapPopup.close();
         this.mapPopup = null;
 
-        const jpegDataUrl = this.images[this.currentImage].dataUrl;
+        let image = this.images[this.currentImage];
+        const jpegDataUrl = image.dataUrl;
         const newJpegData = addGpsInfo(jpegDataUrl, latLng.lat, latLng.lng);
-        const file = this.images[this.currentImage].file;
-        this.fileIo.save(newJpegData, file);
+        image.latLng = latLng;
+        image.saved = true;
+        this.fileIo.save(newJpegData, image.file);
       });
     });
   }

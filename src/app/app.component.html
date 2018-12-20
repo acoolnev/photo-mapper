@@ -18,6 +18,7 @@
           <img class="image" src="{{i != null ? i.dataUrl : ''}}" />
           <div class="image-overlay" fxLayout="row" fxLayoutAlign="space-around center">
               <mat-icon fxFlex="none"> {{i != null && i.latLng != null ? 'location_on' : 'location_off'}} </mat-icon>
+            <mat-icon fxFlex="none" [ngStyle]="{'display': i != null && i.saved ? 'block': 'none'}"> save </mat-icon>
               <span class="image-name mat-body-1" fxFlex="auto"> {{i != null ? i.file.name : ''}} </span>
           </div>
         </button>
