@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
 import { MapPopupRef } from './map-view/map-popup-ref';
-import { MapViewComponent } from './map-view/map-view.component';
+import { MapMarker, MapViewComponent } from './map-view/map-view.component';
 import { FileIo } from './services/file-io.service';
 import { addGpsInfo, getGpsInfo, LatLng } from './tools/utils'
 
@@ -21,6 +21,7 @@ class ImageInfo {
 export class AppComponent implements AfterViewInit {
   @ViewChild('map_view') private mapView: MapViewComponent;
   private mapPopup: MapPopupRef<ConfirmPhotoLocationComponent>;
+  private imageMarker: MapMarker;
   images: ImageInfo[] = [];
   currentImage: number = 0;
 
@@ -37,12 +38,12 @@ export class AppComponent implements AfterViewInit {
     for (let i = 0; i < files.length; ++i) {
       let file = files[i];
       this.fileIo.load(file).subscribe(dataUrl => {
-        let img = {id: i, file: file, latLng: getGpsInfo(dataUrl),
+        let image = {id: i, file: file, latLng: getGpsInfo(dataUrl),
                    dataUrl: dataUrl, saved: false};
-        this.images[i] = img;
+        this.images[i] = image;
 
-        if (i == this.currentImage && img.latLng)
-          this.mapView.addMarker(this.images[this.currentImage].latLng);
+        if (i == this.currentImage)
+          this.setMarker(image);
       });
     }
   }
@@ -54,15 +55,29 @@ export class AppComponent implements AfterViewInit {
       return;
 
     this.currentImage = image.id;
-    if (image.latLng)
-      this.mapView.addMarker(image.latLng);
+    this.setMarker(image);
   }
 
   private clearMapState() {
     if (this.mapPopup) {
       this.mapPopup.close();
     }
-    this.mapView.removeMarkers();
+
+    if (this.imageMarker) {
+      this.imageMarker.remove();
+      this.imageMarker = null;
+    }
+  }
+
+  private setMarker(image: ImageInfo) {
+    if (image && image.latLng) {
+      if (this.imageMarker) {
+        this.imageMarker.move(image.latLng);
+      }
+      else {
+        this.imageMarker = this.mapView.addMarker(image.latLng);
+      }
+    }
   }
 
   // AfterViewInit overrides
@@ -94,6 +109,8 @@ export class AppComponent implements AfterViewInit {
         const newJpegData = addGpsInfo(jpegDataUrl, latLng.lat, latLng.lng);
         image.latLng = latLng;
         image.saved = true;
+        this.setMarker(image);
+
         this.fileIo.save(newJpegData, image.file);
       });
     });

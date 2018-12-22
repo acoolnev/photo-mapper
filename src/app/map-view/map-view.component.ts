@@ -22,6 +22,37 @@ export class MapPopupConfig {
   latLng: LatLng;
 }
 
+export class MapMarker {
+  constructor(
+    private marker: google.maps.Marker,
+    private mapView: MapViewComponent) {}
+
+  makeVisible() {
+    const latLng = this.fromMapLatLng(this.marker.getPosition());
+    if (!this.mapView.isVisible(latLng))
+      this.mapView.setCenter(latLng);
+  }
+
+  move(newLatLng: LatLng, makeVisible = true) {
+    this.marker.setPosition(this.toMapLatLng(newLatLng));
+    
+    if (makeVisible)
+    this.makeVisible();
+  }
+
+  remove() {
+    this.marker.setMap(null);
+  }
+
+  private fromMapLatLng(mapLatLng: google.maps.LatLng) : LatLng {
+    return { lat: mapLatLng.lat(), lng: mapLatLng.lng() };
+  }
+
+  private toMapLatLng(latLng: LatLng) : google.maps.LatLng {
+    return new google.maps.LatLng(latLng.lat, latLng.lng);
+  }
+}
+
 @Component({
   selector: 'map-view',
   templateUrl: './map-view.component.html',
@@ -32,7 +63,6 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   private mapReady$: ReplaySubject<void>;
   @ViewChild('map_canvas') private canvas: ElementRef;
   private map: google.maps.Map;
-  private markers: google.maps.Marker[] = [];
 
   constructor(
     private mapApiLoader: MapApiLoader,
@@ -49,22 +79,21 @@ export class MapViewComponent implements OnInit, AfterViewInit {
     return bounds.contains(this.toMapLatLng(latLng));
   }
 
-  addMarker(latLng: LatLng, makeVisible = true) {
-    let marker = new google.maps.Marker({
+  setCenter(latLng: LatLng) {
+    this.map.setCenter(this.toMapLatLng(latLng));
+  }
+
+  addMarker(latLng: LatLng, makeVisible = true) : MapMarker {
+    const mapMarker = new google.maps.Marker({
       position: new google.maps.LatLng(latLng.lat, latLng.lng),
       map: this.map
     });
-    this.markers.push(marker);
 
-    if (makeVisible && !this.isVisible(latLng))
-      this.map.setCenter(this.toMapLatLng(latLng));
-  }
+    const marker = new MapMarker(mapMarker, this);
+    if (makeVisible)
+      marker.makeVisible();
 
-  removeMarkers() {
-    this.markers.forEach((marker) => {
-      marker.setMap(null);
-    });
-    this.markers = [];
+    return marker;
   }
 
   showPopup<T>(content: ComponentType<T>, config: MapPopupConfig): MapPopupRef<T> {
