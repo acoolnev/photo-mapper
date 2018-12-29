@@ -1,4 +1,7 @@
+@import '~@angular/material/theming';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+$config: mat-typography-config();
 
 $map-popup-border-radius: 2px;
 $map-popup-shadow-color: rgba(0, 0, 0, 0.3);
@@ -10,7 +13,7 @@ $map-popup-border: 1px solid rgb(197, 197, 197);
 body,html {
   margin: 0;
   padding: 0;
-  font-family: Roboto, sans-serif;
+  font-family: mat-font-family($config);
 }
 
 * {
@@ -27,45 +30,86 @@ body,html {
     width: 32vw;
     height: 100%;
 
-    .image-list {
-      overflow-y: auto;
+    .sidepanel-main {
+      width: 100%;
+      height: 100%;
 
-      .image-button {
-        display: block;
-        position: relative;
-        margin: 4px;
-        padding: 0;
-        max-width: calc(100% - 8px);
-        height: auto;
-        border-style: hidden;
+      .sidepanel-container {
+        width: 100%;
+        height: 100%;
 
-        .image {
-          display: block;
-          max-width: 100%;
-          height: auto;
-        }
+        .image-list {
+          overflow-y: auto;
 
-        .image-overlay {
-          position: absolute;
-          bottom: 0;
-          width: 100%;
-          height: auto;
-          padding: 10px;
-          background: rgba(0, 0, 50, 0.6); /* Black see-through */
-          color: white; 
+          .image-button {
+            display: block;
+            position: relative;
+            margin: 4px;
+            padding: 0;
+            max-width: calc(100% - 8px);
+            height: auto;
+            border-style: hidden;
 
-          .image-name {
-            text-align: center;
+            .image {
+              display: block;
+              max-width: 100%;
+              height: auto;
+            }
+
+            .image-overlay {
+              position: absolute;
+              bottom: 0;
+              width: 100%;
+              height: auto;
+              padding: 10px;
+              background: rgba(0, 0, 50, 0.6); /* Black see-through */
+              color: white; 
+
+              .image-name {
+                text-align: center;
+              }
+            }
+          }
+
+          .image-button:focus {
+            outline: none;
+          }
+
+          .image-selected {
+            border: 4px solid blue;
           }
         }
       }
+    }
+    .sidepanel-help {
+      display: none;
+      width: 100%;
+      height: 100%;
+      
+      .sidepanel-container {
+        width: 100%;
+        height: 100%;
 
-      .image-button:focus {
-        outline: none;
-      }
+        .help-content {
+          padding: 0 16px;
+          overflow-y: auto;
 
-      .image-selected {
-        border: 4px solid blue;
+          article {
+            font-size: mat-font-size($config, body-1);
+
+            h1 {
+              font-size: mat-font-size($config, subheading-1);
+            }
+
+            ol {
+              padding-left: 1rem;
+            }
+
+            ol li {
+              margin-top: 0.5rem;
+            }
+          }
+        }
       }
     }
   }
