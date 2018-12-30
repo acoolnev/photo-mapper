@@ -1,7 +1,7 @@
 <section class="ak_pmap_main" fxLayout="column" fxLayoutAlign="start stretch">
   <mat-sidenav-container fxFlex>
     <mat-sidenav mode="side" align="end" class="mat-elevation-z7" #sidenav>
-      <section class="sidepanel-main">
+      <section class="sidepanel-main" [ngStyle]="{'display': !showHelp ? 'block': 'none'}">
         <div class="sidepanel-container" fxLayout="column" fxLayoutAlign="start stretch">
           <mat-toolbar color="primary" fxFlex="none">
             <div fxFill fxLayout="row" fxLayoutAlign="start center">
@@ -13,7 +13,7 @@
                   <mat-icon> photo </mat-icon> Load Photos
                 </button>
               </div>
-              <button mat-icon-button fxFlex="none">
+              <button mat-icon-button fxFlex="none" (click)="showHelp=true">
                 <mat-icon>help</mat-icon>
               </button>
             </div>
@@ -32,12 +32,12 @@
           </section>
         </div>
       </section>
-      <section class="sidepanel-help">
+      <section class="sidepanel-help" [ngStyle]="{'display': showHelp ? 'block': 'none'}">
         <div class="sidepanel-container" fxLayout="column" fxLayoutAlign="start stretch">
           <mat-toolbar color="primary" fxflex="none">
             <div fxFill fxLayout="row" fxLayoutAlign="start center">
               <span fxFlex> Help </span>
-              <button mat-icon-button fxFlex="none">
+              <button mat-icon-button fxFlex="none" (click)="showHelp=false">
                 <mat-icon> clear </mat-icon>
               </button>
             </div>

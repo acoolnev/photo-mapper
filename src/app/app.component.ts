@@ -24,6 +24,7 @@ export class AppComponent implements AfterViewInit {
   private imageMarker: MapMarker;
   images: ImageInfo[] = [];
   currentImage: number = 0;
+  showHelp: boolean = false;
 
   constructor(private fileIo: FileIo) {}
 
