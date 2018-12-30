@@ -7,7 +7,7 @@ import { addGpsInfo, getGpsInfo, LatLng } from './tools/utils'
 
 class ImageInfo {
   id: number;
-  file: File;
+  fileName: string;
   latLng: LatLng;
   dataUrl: string;
   saved: boolean;
@@ -39,7 +39,7 @@ export class AppComponent implements AfterViewInit {
     for (let i = 0; i < files.length; ++i) {
       let file = files[i];
       this.fileIo.load(file).subscribe(dataUrl => {
-        let image = {id: i, file: file, latLng: getGpsInfo(dataUrl),
+        let image = {id: i, fileName: file.name, latLng: getGpsInfo(dataUrl),
                    dataUrl: dataUrl, saved: false};
         this.images[i] = image;
 
@@ -112,7 +112,7 @@ export class AppComponent implements AfterViewInit {
         image.saved = true;
         this.setMarker(image);
 
-        this.fileIo.save(newJpegData, image.file);
+        this.fileIo.save(newJpegData, image.fileName);
       });
     });
   }

@@ -26,8 +26,8 @@ export class FileIo {
     return result$;
   }
 
-  save(dataUrl: string, file: File) {
+  save(dataUrl: string, fileName: string) {
     const blob = dataUrlToBlob(dataUrl);
-    saveAs(blob, file.name);
+    saveAs(blob, fileName);
   }
 }
