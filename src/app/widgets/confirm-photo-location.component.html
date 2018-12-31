@@ -1,11 +1,10 @@
-<div>
-  Confirm the selected <br> photo location
-  <div>
-    <button class="confirm" mat-icon-button (click)="confirmLocation()">
-      <mat-icon inline="true">check</mat-icon>
-    </button>
-    <button class="cancel" mat-icon-button (click)="cancelLocation()">
-      <mat-icon inline="true">cancel</mat-icon>
+<div class="save-container">
+  <button class="close-button" (click)="cancelLocation()">
+    <mat-icon>clear</mat-icon>
+  </button>
+  <div class="save-content">
+    <button class="save-button" mat-button (click)="confirmLocation()">
+      <mat-icon>save</mat-icon> Save location
     </button>
   </div>
 </div>
