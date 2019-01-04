@@ -20,15 +20,18 @@ body,html {
   box-sizing: border-box;
 }
 
-.ak_pmap_main {
-  overflow-x: auto;
-
-  display: flex;
+.ak_pmap_container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
 
   .mat-sidenav {
-    width: 32vw;
+    min-width: 350px;
+    width: 36%;
     height: 100%;
+    overflow-x: hidden;
 
     .sidepanel-main {
       width: 100%;
@@ -114,31 +117,34 @@ body,html {
     }
   }
 
-  .map_container {
-    width: 100%;
-    height: 100%;
-  }
- 
-  .drawer-button {
-    &.container {
-      position: absolute;
-      top: 10px;
+  .mat-sidenav-content {
+
+    .map_container {
+      width: 100%;
+      height: 100%;
     }
-    .toggle-button {
-      width: 24px;
-      height: 48px;
-      cursor: pointer;
-      background: rgba(255,255,255,0.9) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAUCAQAAAAXDMSnAAAAi0lEQVR4AX3JQcqBURQG4O/+9WNG30D3vOfSDTuQsgcZyBakZANSzMVMBme3zsBI5/VMn4ZKLP5ki1E4tYejWpilxVUtzOEUD68odYmXR5BJNp/4zllXD2phllYvamHmirsayUkfJ5ruHzueTldC08kcT5YOY9xYujqQM03XKXuaLmEtNF1e1Nz89gbL+0do6OEwRwAAAABJRU5ErkJggg==) 7px center/7px 10px no-repeat;
-      padding: 0;
-      border-style: none;
-      border-left: 1px solid #D4D4D4;
-      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-    }
-    .open-drawer {
-      transform: scaleX(-1);
-    }
-    .toggle-button:focus {
-      outline:0;
+  
+    .drawer-button {
+      &.container {
+        position: absolute;
+        top: 10px;
+      }
+      .toggle-button {
+        width: 24px;
+        height: 48px;
+        cursor: pointer;
+        background: rgba(255,255,255,0.9) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAUCAQAAAAXDMSnAAAAi0lEQVR4AX3JQcqBURQG4O/+9WNG30D3vOfSDTuQsgcZyBakZANSzMVMBme3zsBI5/VMn4ZKLP5ki1E4tYejWpilxVUtzOEUD68odYmXR5BJNp/4zllXD2phllYvamHmirsayUkfJ5ruHzueTldC08kcT5YOY9xYujqQM03XKXuaLmEtNF1e1Nz89gbL+0do6OEwRwAAAABJRU5ErkJggg==) 7px center/7px 10px no-repeat;
+        padding: 0;
+        border-style: none;
+        border-left: 1px solid #D4D4D4;
+        box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+      }
+      .open-drawer {
+        transform: scaleX(-1);
+      }
+      .toggle-button:focus {
+        outline:0;
+      }
     }
   }
 }
