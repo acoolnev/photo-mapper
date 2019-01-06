@@ -1,0 +1,30 @@
+@import '~@angular/material/theming';
+
+$config: mat-typography-config();
+
+.file-list-container {
+  font-size: mat-font-size($config, body-1);
+
+  h1 {
+    margin-top: 0;
+    font-size: mat-font-size($config, subheading-1);
+  }
+
+  .file-list {
+    max-height: 5.5rem;
+    overflow-y: auto;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .close-button {
+    color: rgb(180, 180, 180); 
+  }
+  
+  .close-button:hover {
+    color: white;
+  }
+}

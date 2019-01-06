@@ -1,4 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material';
+import { BadFileListComponent } from './widgets/bad-file-list.component';
 import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
 import { MapPopupRef } from './map-view/map-popup-ref';
 import { MapMarker, MapViewComponent } from './map-view/map-view.component';
@@ -26,7 +28,7 @@ export class AppComponent implements AfterViewInit {
   currentImage: number = 0;
   showHelp: boolean = false;
 
-  constructor(private fileIo: FileIo) {}
+  constructor(private fileIo: FileIo, private snackBar: MatSnackBar) {}
 
   public onFilesSelected(event: Event) {
     let files: FileList = (event.target as HTMLInputElement).files;
@@ -34,17 +36,35 @@ export class AppComponent implements AfterViewInit {
       return;
 
     this.clearMapState();
-    this.images.length = 0; // Clear images
+    this.images = []; // Clear images
     this.currentImage = 0;
+    let imageId = 0;
+    let badFilesSnackBarRef: MatSnackBarRef<BadFileListComponent> = null;
+
     for (let i = 0; i < files.length; ++i) {
       let file = files[i];
-      this.fileIo.load(file).subscribe(dataUrl => {
-        let image = {id: i, fileName: file.name, latLng: getGpsInfo(dataUrl),
-                   dataUrl: dataUrl, saved: false};
-        this.images[i] = image;
+      this.fileIo.load(file).subscribe({
+        next: (dataUrl) => {
+          let image = {id: imageId, fileName: file.name, latLng: getGpsInfo(dataUrl),
+                    dataUrl: dataUrl, saved: false};
+          imageId = this.images.push(image);
 
-        if (i == this.currentImage)
-          this.setMarker(image);
+          if (imageId == this.currentImage)
+            this.setMarker(image);
+        },
+        error: (err) => {
+          if (!badFilesSnackBarRef) {
+            badFilesSnackBarRef = this.snackBar.openFromComponent(BadFileListComponent, {
+              duration: 20000
+            });
+
+            badFilesSnackBarRef.instance.close.subscribe(() => {
+              badFilesSnackBarRef.dismiss();
+            });
+          }
+
+          badFilesSnackBarRef.instance.fileNames.push(file.name);
+        }
       });
     }
   }

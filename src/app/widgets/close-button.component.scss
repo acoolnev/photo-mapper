@@ -1,0 +1,26 @@
+$close-button-size: 1.2rem;
+
+.close-button-content {
+  position: absolute;
+  top: 0px;
+  right: 6px;
+  width: $close-button-size;
+  height: $close-button-size;
+  border-style: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+
+  .mat-icon {
+    width: $close-button-size;
+    height: $close-button-size;
+    line-height: $close-button-size;
+    font-size: $close-button-size;
+  }
+}
+.close-button-content:hover {
+  color: inherit;
+}
+.close-button-content:focus {
+  outline: 0;
+}

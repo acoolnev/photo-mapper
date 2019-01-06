@@ -1,0 +1,7 @@
+<div class="file-list-container">
+  <h1> Could not open files: </h1>
+  <section class="file-list">
+    <p *ngFor="let fileName of fileNames">{{fileName}}</p> 
+  </section>
+  <close-button (click)="closeList()"> </close-button>
+</div>
