@@ -1,10 +1,8 @@
 <div class="save-container">
-  <button class="close-button" (click)="cancelLocation()">
-    <mat-icon>clear</mat-icon>
-  </button>
   <div class="save-content">
     <button class="save-button" mat-button (click)="confirmLocation()">
       <mat-icon>save</mat-icon> Save location
     </button>
   </div>
+  <close-button (click)="cancelLocation()"> </close-button>
 </div>

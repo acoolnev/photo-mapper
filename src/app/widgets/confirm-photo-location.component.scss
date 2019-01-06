@@ -1,39 +1,13 @@
 @import '~@angular/material/theming';
 
 $config: mat-typography-config();
-$close-button-size: 1.2rem;
 
 .save-container {
   position: relative;
 
-  .close-button {
-    position: absolute;
-    top: 0px;
-    right: 6px;
-    width: $close-button-size;
-    height: $close-button-size;
-    border-style: none;
-    background: transparent;
-    color: rgb(180, 180, 180); 
-    cursor: pointer;
-
-    .mat-icon {
-      width: $close-button-size;
-      height: $close-button-size;
-      line-height: $close-button-size;
-      font-size: $close-button-size;
-    }
-  }
-  .close-button:hover {
-    color: black;
-  }
-  .close-button:focus {
-    outline:0;
-  }
-
   .save-content {
     padding: 6px;
-    padding-right: $close-button-size + 0.3rem;
+    padding-right: 1.3rem;
 
     .save-button.mat-button {
       padding: 0;
@@ -41,5 +15,13 @@ $close-button-size: 1.2rem;
         color: rgb(120, 120, 120); 
       }
     }
+  }
+
+  .close-button {
+    color: rgb(180, 180, 180);
+  }
+
+  .close-button:hover {
+    color: black;
   }
 }
