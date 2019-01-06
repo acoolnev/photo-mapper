@@ -47,10 +47,12 @@ export class AppComponent implements AfterViewInit {
         next: (dataUrl) => {
           let image = {id: imageId, fileName: file.name, latLng: getGpsInfo(dataUrl),
                     dataUrl: dataUrl, saved: false};
-          imageId = this.images.push(image);
+          this.images.push(image);
 
           if (imageId == this.currentImage)
             this.setMarker(image);
+
+          ++imageId;
         },
         error: (err) => {
           if (!badFilesSnackBarRef) {
