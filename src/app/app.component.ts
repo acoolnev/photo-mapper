@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatSnackBar, MatSnackBarRef } from '@angular/material';
+import { MatSidenav, MatSnackBar, MatSnackBarRef } from '@angular/material';
 import { BadFileListComponent } from './widgets/bad-file-list.component';
 import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
 import { MapPopupRef } from './map-view/map-popup-ref';
@@ -21,6 +21,7 @@ class ImageInfo {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
+  @ViewChild('sidenav') private sidenav: MatSidenav;
   @ViewChild('map_view') private mapView: MapViewComponent;
   private mapPopup: MapPopupRef<ConfirmPhotoLocationComponent>;
   private imageMarker: MapMarker;
@@ -105,6 +106,8 @@ export class AppComponent implements AfterViewInit {
 
   // AfterViewInit overrides
   ngAfterViewInit() {
+
+    this.sidenav.open();
     
     this.mapView.onClick().subscribe((latLng: LatLng) => {
       if (this.mapPopup) {
