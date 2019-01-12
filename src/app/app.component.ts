@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MatSidenav, MatSnackBar, MatSnackBarRef } from '@angular/material';
 import { BadFileListComponent } from './widgets/bad-file-list.component';
 import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
@@ -21,6 +21,7 @@ class ImageInfo {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
+  @ViewChild('selectFiles') private selectFiles: ElementRef;
   @ViewChild('sidenav') private sidenav: MatSidenav;
   @ViewChild('map_view') private mapView: MapViewComponent;
   private mapPopup: MapPopupRef<ConfirmPhotoLocationComponent>;
@@ -30,6 +31,28 @@ export class AppComponent implements AfterViewInit {
   showHelp: boolean = false;
 
   constructor(private fileIo: FileIo, private snackBar: MatSnackBar) {}
+
+  public onLoadFilesClick(event: Event) {
+    try {
+      this.selectFiles.nativeElement.click();
+    }
+    catch(err) {
+      if (err instanceof Error) {
+        let badFilesSnackBarRef = this.snackBar.openFromComponent(BadFileListComponent, {
+          duration: 10000
+        });
+
+        badFilesSnackBarRef.instance.close.subscribe(() => {
+          badFilesSnackBarRef.dismiss();
+        });
+
+        badFilesSnackBarRef.instance.fileNames.push(err.message);
+      }
+      else {
+        throw err;
+      }
+    }
+  }
 
   public onFilesSelected(event: Event) {
     let files: FileList = (event.target as HTMLInputElement).files;
