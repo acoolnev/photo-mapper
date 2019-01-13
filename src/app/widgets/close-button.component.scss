@@ -3,7 +3,7 @@ $close-button-size: 1.2rem;
 .close-button-content {
   position: absolute;
   top: 0px;
-  right: 6px;
+  right: 0px;
   width: $close-button-size;
   height: $close-button-size;
   border-style: none;
@@ -12,6 +12,9 @@ $close-button-size: 1.2rem;
   cursor: pointer;
 
   .mat-icon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
     width: $close-button-size;
     height: $close-button-size;
     line-height: $close-button-size;
