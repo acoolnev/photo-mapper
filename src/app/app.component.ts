@@ -130,7 +130,9 @@ export class AppComponent implements AfterViewInit {
   // AfterViewInit overrides
   ngAfterViewInit() {
 
-    this.sidenav.open();
+    setTimeout(() => {
+      this.sidenav.open();
+    });
     
     this.mapView.onClick().subscribe((latLng: LatLng) => {
       if (this.mapPopup) {
