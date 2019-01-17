@@ -118,10 +118,10 @@ export class MapViewComponent implements OnInit, AfterViewInit {
                 handler({
                   lat: mouseEvent.latLng.lat(),
                   lng: mouseEvent.latLng.lng()});
-            }, 200);
+            }, 260);
           });
 
-        // Cacncel 'click' if 'dblclick' detected.
+        // Cancel 'click' if 'dblclick' detected.
         mapEvents.dblclickEvent = mapView.map.addListener('dblclick',
           function(mouseEvent) {
             clearTimeout(onclickTimeout);
