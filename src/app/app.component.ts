@@ -63,36 +63,49 @@ export class AppComponent implements AfterViewInit {
     this.images = []; // Clear images
     this.currentImage = 0;
     let imageId = 0;
+    let currentFileIndex = 0;
     let badFilesSnackBarRef: MatSnackBarRef<BadFileListComponent> = null;
 
-    for (let i = 0; i < files.length; ++i) {
-      let file = files[i];
-      this.fileIo.load(file).subscribe({
-        next: (dataUrl) => {
-          let image = {id: imageId, fileName: file.name, latLng: getGpsInfo(dataUrl),
-                    dataUrl: dataUrl, saved: false};
-          this.images.push(image);
+    let  fileHandler = {
+      next: (dataUrl) => {
+        let file = files[currentFileIndex];
 
-          if (imageId == this.currentImage)
-            this.setMarker(image);
+        let image = {id: imageId, fileName: file.name, latLng: getGpsInfo(dataUrl),
+                  dataUrl: dataUrl, saved: false};
+        this.images.push(image);
 
-          ++imageId;
-        },
-        error: (err) => {
-          if (!badFilesSnackBarRef) {
-            badFilesSnackBarRef = this.snackBar.openFromComponent(BadFileListComponent, {
-              duration: 20000
-            });
+        if (imageId == this.currentImage)
+          this.setMarker(image);
 
-            badFilesSnackBarRef.instance.close.subscribe(() => {
-              badFilesSnackBarRef.dismiss();
-            });
-          }
+        ++imageId;
 
-          badFilesSnackBarRef.instance.fileNames.push(file.name);
+        // Load next file.
+        if (++currentFileIndex < files.length)
+          this.fileIo.load(files[currentFileIndex]).subscribe(fileHandler);
+      },
+      error: (err) => {
+        let file = files[currentFileIndex];
+
+        if (!badFilesSnackBarRef) {
+          badFilesSnackBarRef = this.snackBar.openFromComponent(BadFileListComponent, {
+            duration: 20000
+          });
+
+          badFilesSnackBarRef.instance.close.subscribe(() => {
+            badFilesSnackBarRef.dismiss();
+          });
         }
-      });
-    }
+
+        badFilesSnackBarRef.instance.fileNames.push(file.name);
+
+        // Load next file.
+        if (++currentFileIndex < files.length)
+          this.fileIo.load(files[currentFileIndex]).subscribe(fileHandler);
+      }
+    };
+
+    // Load files asynchronously one by one.
+    this.fileIo.load(files[currentFileIndex]).subscribe(fileHandler);
   }
 
   public onImageClick(image: ImageInfo) {
