@@ -29,6 +29,7 @@ export class AppComponent implements AfterViewInit {
   private cancelFileLoad: Cancelation = new Cancelation;
   images: ImageInfo[] = [];
   currentImage: number = 0;
+  fileLoadProgressValue: number = 100;
   showHelp: boolean = false;
 
   constructor(private fileIo: FileIo, private snackBar: MatSnackBar) {}
@@ -80,6 +81,9 @@ export class AppComponent implements AfterViewInit {
           return;
         }
 
+        this.fileLoadProgressValue = Math.floor(
+          ((currentFileIndex + 1) * 100 / files.length) + 0.5);
+
         let file = files[currentFileIndex];
 
         let image = {id: imageId, fileName: file.name, latLng: getGpsInfo(dataUrl),
@@ -100,6 +104,9 @@ export class AppComponent implements AfterViewInit {
           files = null;
           return;
         }
+
+        this.fileLoadProgressValue = Math.floor(
+          ((currentFileIndex + 1) * 100 / files.length) + 0.5);
 
         let file = files[currentFileIndex];
 

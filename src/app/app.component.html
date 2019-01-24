@@ -2,6 +2,10 @@
   <mat-sidenav mode="side" class="mat-elevation-z7" #sidenav>
     <section class="sidepanel-main" [ngStyle]="{'display': !showHelp ? 'block': 'none'}">
       <div class="sidepanel-container" fxLayout="column" fxLayoutAlign="start stretch">
+        <mat-progress-bar class="file-load-progress" color="accent" mode="determinate"
+          [value]="fileLoadProgressValue"
+          [ngStyle]="{'display': fileLoadProgressValue != 100 ? 'block': 'none'}">
+        </mat-progress-bar>
         <mat-toolbar color="primary" fxFlex="none">
           <div fxFill fxLayout="row" fxLayoutAlign="start center">
             <div fxFlex>
