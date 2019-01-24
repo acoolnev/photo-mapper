@@ -1,5 +1,9 @@
 import * as piexif from './piexif.js';
 
+export class Cancelation {
+  cancel: boolean = false;
+}
+
 export class LatLng {
   lat: number;
   lng: number;

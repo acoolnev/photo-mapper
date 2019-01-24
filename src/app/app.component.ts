@@ -5,7 +5,7 @@ import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.
 import { MapPopupRef } from './map-view/map-popup-ref';
 import { MapMarker, MapViewComponent } from './map-view/map-view.component';
 import { FileIo } from './services/file-io.service';
-import { addGpsInfo, getGpsInfo, LatLng } from './tools/utils'
+import { addGpsInfo, Cancelation, getGpsInfo, LatLng } from './tools/utils'
 
 class ImageInfo {
   id: number;
@@ -26,6 +26,7 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('map_view') private mapView: MapViewComponent;
   private mapPopup: MapPopupRef<ConfirmPhotoLocationComponent>;
   private imageMarker: MapMarker;
+  private cancelFileLoad: Cancelation = new Cancelation;
   images: ImageInfo[] = [];
   currentImage: number = 0;
   showHelp: boolean = false;
@@ -60,14 +61,25 @@ export class AppComponent implements AfterViewInit {
       return;
 
     this.clearMapState();
+  
+    // Cancel former files loading if it is still in progress.
+    this.cancelFileLoad.cancel = true;
+    this.cancelFileLoad = new Cancelation;
+    let cancelation = this.cancelFileLoad;
+
     this.images = []; // Clear images
     this.currentImage = 0;
     let imageId = 0;
     let currentFileIndex = 0;
     let badFilesSnackBarRef: MatSnackBarRef<BadFileListComponent> = null;
-
+  
     let  fileHandler = {
       next: (dataUrl) => {
+        if (cancelation.cancel) {
+          files = null;
+          return;
+        }
+
         let file = files[currentFileIndex];
 
         let image = {id: imageId, fileName: file.name, latLng: getGpsInfo(dataUrl),
@@ -84,6 +96,11 @@ export class AppComponent implements AfterViewInit {
           this.fileIo.load(files[currentFileIndex]).subscribe(fileHandler);
       },
       error: (err) => {
+        if (cancelation.cancel) {
+          files = null;
+          return;
+        }
+
         let file = files[currentFileIndex];
 
         if (!badFilesSnackBarRef) {
