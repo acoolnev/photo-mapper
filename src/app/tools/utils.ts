@@ -9,13 +9,17 @@ export class LatLng {
   lng: number;
 }
 
-function getGpsData(jpegDataUrl: string) {
-  let exif = piexif.load(jpegDataUrl);
-  return exif['GPS'];
+export function loadExifObject(jpegDataUrl: string) : object {
+  return piexif.load(jpegDataUrl);
 }
 
-export function getGpsInfo(jpegDataUrl: string) : LatLng {
-  let gpsData = getGpsData(jpegDataUrl);
+export function storeExifObject(exifObject: object, jpegDataUrl: string) : string {
+  let exifBytes = piexif.dump(exifObject);
+  return piexif.insert(exifBytes, jpegDataUrl); // JPEG data URL with GPS
+}
+
+export function getGpsInfo(exifObject: object) : LatLng {
+  let gpsData = exifObject['GPS'];
 
   const gpsTags = [piexif.GPSIFD.GPSLatitudeRef, piexif.GPSIFD.GPSLatitude,
                    piexif.GPSIFD.GPSLongitudeRef, piexif.GPSIFD.GPSLongitude];
@@ -34,16 +38,12 @@ export function getGpsInfo(jpegDataUrl: string) : LatLng {
           lng: piexif.GPSHelper.dmsRationalToDeg(lngDms, lngRef)};
 }
 
-export function addGpsInfo(jpegDataUrl: string, lat: number, lng: number) {
-  let gpsIfd = {};
-  gpsIfd[piexif.GPSIFD.GPSLatitudeRef] = lat < 0 ? 'S' : 'N';
-  gpsIfd[piexif.GPSIFD.GPSLatitude] = piexif.GPSHelper.degToDmsRational(Math.abs(lat));
-  gpsIfd[piexif.GPSIFD.GPSLongitudeRef] = lng < 0 ? 'W' : 'E';
-  gpsIfd[piexif.GPSIFD.GPSLongitude] = piexif.GPSHelper.degToDmsRational(Math.abs(lng));
-
-  let exifObj = {"GPS":gpsIfd};
-  let exifBytes = piexif.dump(exifObj);
-  return piexif.insert(exifBytes, jpegDataUrl); // JPEG data URL with GPS
+export function addGpsInfo(exifObject: object, latLng: LatLng) {
+  let gpsIfd = exifObject['GPS'];
+  gpsIfd[piexif.GPSIFD.GPSLatitudeRef] = latLng.lat < 0 ? 'S' : 'N';
+  gpsIfd[piexif.GPSIFD.GPSLatitude] = piexif.GPSHelper.degToDmsRational(Math.abs(latLng.lat));
+  gpsIfd[piexif.GPSIFD.GPSLongitudeRef] = latLng.lng < 0 ? 'W' : 'E';
+  gpsIfd[piexif.GPSIFD.GPSLongitude] = piexif.GPSHelper.degToDmsRational(Math.abs(latLng.lng));
 }
 
 export function binaryToArray(binary: string) : Uint8Array {

@@ -5,11 +5,14 @@ import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.
 import { MapPopupRef } from './map-view/map-popup-ref';
 import { MapMarker, MapViewComponent } from './map-view/map-view.component';
 import { FileIo } from './services/file-io.service';
-import { addGpsInfo, Cancelation, getGpsInfo, LatLng } from './tools/utils'
+import {
+   addGpsInfo, Cancelation, getGpsInfo, LatLng,
+   loadExifObject, storeExifObject } from './tools/utils'
 
 class ImageInfo {
   id: number;
   fileName: string;
+  exifObject: object;
   latLng: LatLng;
   dataUrl: string;
   saved: boolean;
@@ -86,8 +89,11 @@ export class AppComponent implements AfterViewInit {
 
         let file = files[currentFileIndex];
 
-        let image = {id: imageId, fileName: file.name, latLng: getGpsInfo(dataUrl),
-                  dataUrl: dataUrl, saved: false};
+        let exifObject = loadExifObject(dataUrl);
+        
+        let image = {id: imageId, fileName: file.name, exifObject: exifObject,
+                     latLng: getGpsInfo(exifObject), dataUrl: dataUrl,
+                     saved: false};
         this.images.push(image);
 
         if (imageId == this.currentImage)
@@ -193,8 +199,8 @@ export class AppComponent implements AfterViewInit {
         this.mapPopup = null;
 
         let image = this.images[this.currentImage];
-        const jpegDataUrl = image.dataUrl;
-        const newJpegData = addGpsInfo(jpegDataUrl, latLng.lat, latLng.lng);
+        addGpsInfo(image.exifObject, latLng);
+        const newJpegData = storeExifObject(image.exifObject, image.dataUrl);
         image.latLng = latLng;
         image.saved = true;
         this.setMarker(image);
