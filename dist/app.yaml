@@ -1,0 +1,8 @@
+runtime: nodejs8
+handlers:
+- url: /
+  static_files: PhotoMapper/index.html
+  upload: PhotoMapper/index.html
+- url: /
+  static_dir: PhotoMapper
+
