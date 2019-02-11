@@ -142,9 +142,9 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   private initializeMap() {
     this.injectMapsOverlay();
 
-    let myLatlng = {lat: 39.739252, lng: -104.989237};
+    let myLatlng = {lat: 0.0, lng: 0.0};
     let mapOptions = {
-      zoom: 8,
+      zoom: 2,
       center: myLatlng,
       clickableIcons: false,
       draggableCursor: 'default',
