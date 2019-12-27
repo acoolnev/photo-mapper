@@ -18,7 +18,7 @@
     "@angular/core": "^8.2.14",
     "@angular/flex-layout": "^8.0.0-beta.27",
     "@angular/forms": "^8.2.14",
-    "@angular/http": "^6.1.10",
+    "@angular/http": "^7.2.15",
     "@angular/material": "^8.2.3",
     "@angular/platform-browser": "^8.2.14",
     "@angular/platform-browser-dynamic": "^8.2.14",
@@ -32,10 +32,10 @@
     "node-sass": "^4.13.0",
     "rxjs": "^6.5.3",
     "web-animations-js": "^2.3.2",
-    "zone.js": "^0.9.1"
+    "zone.js": "^0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.7.5",
+    "@angular-devkit/build-angular": "^0.803.21",
     "@angular/cli": "~8.3.21",
     "@angular/compiler-cli": "^8.2.14",
     "@angular/language-service": "^8.2.14",
