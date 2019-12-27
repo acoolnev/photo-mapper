@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { MatSidenav, MatSnackBar, MatSnackBarRef } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { BadFileListComponent } from './widgets/bad-file-list.component';
 import { ConfirmPhotoLocationComponent } from './widgets/confirm-photo-location.component';
 import { MapPopupRef } from './map-view/map-popup-ref';
