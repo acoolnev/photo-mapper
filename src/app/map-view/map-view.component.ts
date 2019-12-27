@@ -108,8 +108,8 @@ export class MapViewComponent implements OnInit, AfterViewInit {
 
     let mapEvents = { clickEvent: null, dblclickEvent: null };
 
-    return this.mapReady$.pipe(switchMap(() => fromEventPattern(
-      (handler:any) => { // addHandler
+    return this.mapReady$.pipe(switchMap(() => fromEventPattern<LatLng>(
+      (handler: (p:LatLng) => void) => { // addHandler
         let onclickTimeout = null;
 
         mapEvents.clickEvent = mapView.map.addListener('click',
@@ -127,7 +127,7 @@ export class MapViewComponent implements OnInit, AfterViewInit {
             clearTimeout(onclickTimeout);
           });
       },
-      (handler:any) => { // removeHandler
+      (handler: (p:LatLng) => void) => { // removeHandler
         google.maps.event.removeListener(mapEvents.clickEvent);
         google.maps.event.removeListener(mapEvents.dblclickEvent);
       })));
