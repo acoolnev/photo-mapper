@@ -24,9 +24,9 @@ class ImageInfo {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild('selectFiles') private selectFiles: ElementRef;
-  @ViewChild('sidenav') private sidenav: MatSidenav;
-  @ViewChild('map_view') private mapView: MapViewComponent;
+  @ViewChild('selectFiles', { static: true }) private selectFiles: ElementRef;
+  @ViewChild('sidenav', { static: true }) private sidenav: MatSidenav;
+  @ViewChild('map_view', { static: true }) private mapView: MapViewComponent;
   private mapPopup: MapPopupRef<ConfirmPhotoLocationComponent>;
   private imageMarker: MapMarker;
   private cancelFileLoad: Cancelation = new Cancelation;

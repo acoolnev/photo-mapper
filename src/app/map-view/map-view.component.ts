@@ -61,7 +61,7 @@ export class MapMarker {
 export class MapViewComponent implements OnInit, AfterViewInit {
   private apiReady$: Observable<void>;
   private mapReady$: ReplaySubject<void>;
-  @ViewChild('map_canvas') private canvas: ElementRef;
+  @ViewChild('map_canvas', { static: true }) private canvas: ElementRef;
   private map: google.maps.Map;
 
   constructor(
