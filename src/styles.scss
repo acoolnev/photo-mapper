@@ -8,7 +8,7 @@ $map-popup-shadow-color: rgba(0, 0, 0, 0.3);
 $map-popup-background: white;
 $map-popup-padding: 10px;
 $map-popup-arrow-height: 16px;
-$map-popup-border: 1px solid rgb(197, 197, 197);
+$map-popup-border: none;
 
 body,html {
   margin: 0;
@@ -182,7 +182,7 @@ body,html {
     width: $map-popup-arrow-height * 2;
     height: $map-popup-arrow-height * 2;
     border: $map-popup-border;
-    box-shadow: 2px 1px 4px $map-popup-shadow-color;
+    box-shadow: 1px 1px 4px $map-popup-shadow-color;
     transform: scaleX(0.4) rotate(45deg) ;
     background: $map-popup-background;
   }
