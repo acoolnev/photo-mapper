@@ -29,10 +29,6 @@ import { ScriptLoader } from './services/script-loader.service';
     ConfirmPhotoLocationComponent,
     MapViewComponent
   ],
-  entryComponents: [
-    BadFileListComponent,
-    ConfirmPhotoLocationComponent
-  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

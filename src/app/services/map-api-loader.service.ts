@@ -20,7 +20,7 @@ export class MapApiLoader implements OnDestroy {
     this.runOnce.run("load-map-api", () => {
 
       window['initMapApi'] = () => {
-        this.zone.run(() => { this.api$.next(); });
+        this.zone.run(() => { this.api$.next(true); });
       };
 
       this.scriptLoader.load(this.formatApiUrl()).subscribe(

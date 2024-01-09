@@ -1,13 +1,15 @@
-@import '~@angular/material/theming';
+@use '@angular/material' as mat;
 
-$config: mat-typography-config();
+@include mat.core();
+
+$app-typography: mat.define-typography-config();
 
 .file-list-container {
-  font-size: mat-font-size($config, body-1);
+  font-size: mat.font-size($app-typography, body-1);
 
   h1 {
     margin-top: 0;
-    font-size: mat-font-size($config, subheading-1);
+    font-size: mat.font-size($app-typography, subtitle-1);
   }
 
   .file-list {

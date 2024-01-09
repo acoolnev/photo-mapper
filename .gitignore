@@ -1,8 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist/*
-!/dist/app.yaml
+/dist
 /tmp
 /out-tsc
 
@@ -34,8 +33,10 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-/my
 
 # System Files
 .DS_Store
 Thumbs.db
+
+# Ignore cache created with the Angular CLI.
+.angular/
