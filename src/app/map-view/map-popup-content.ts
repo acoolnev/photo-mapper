@@ -23,9 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import {secretEnvironment } from './environment.secret';
+import { Component } from '@angular/core';
 
-export const environment = {
-  production: true,
-  ...secretEnvironment
-};
+@Component({
+  selector: 'map-popup-content',
+  template: `<div>Test</div>`
+})
+export class MapPopupContent {}
